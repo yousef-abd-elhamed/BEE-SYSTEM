@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bee Academy - نظام الإيصالات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+body {
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2C3E50 50%, #1a1a1a 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* تصميم اللوجو الاحترافي الجديد */
+.logo-container {
+    display: inline-block;
+    padding: 30px;
+    background: linear-gradient(145deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.1));
+    border-radius: 50%;
+    box-shadow: 
+        0 10px 40px rgba(255, 193, 7, 0.4),
+        0 0 0 1px rgba(255, 193, 7, 0.3),
+        inset 0 0 30px rgba(255, 193, 7, 0.1);
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(255, 193, 7, 0.2);
+    margin-bottom: 20px;
+    position: relative;
+    animation: pulseGlow 3s ease-in-out infinite;
+    border-radius: 50%;
+}
+
+/* حلقة مضيئة حول اللوجو */
+.logo-container::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(45deg, #FFC107, #FF9800, #FFC107);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+    animation: rotate 4s linear infinite;
+}
+
+.logo-container img {
+    width: 200px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.logo-container:hover img {
+    transform: scale(1.1) rotate(5deg);
+}
+
+@keyframes pulseGlow {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 
+            0 10px 40px rgba(255, 193, 7, 0.4),
+            0 0 0 1px rgba(255, 193, 7, 0.3),
+            inset 0 0 30px rgba(255, 193, 7, 0.1);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 
+            0 15px 60px rgba(255, 193, 7, 0.6),
+            0 0 0 2px rgba(255, 193, 7, 0.5),
+            inset 0 0 40px rgba(255, 193, 7, 0.2);
+    }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+h1 {
+    font-size: 3.5em;
+    font-weight: 900;
+    color: #FFC107;
+    margin: 20px 0;
+    text-shadow: 2px 2px 20px rgba(255, 193, 7, 0.5);
+}
+
+.tagline {
+    font-size: 1.3em;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.receipt-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 25px;
+    padding: 50px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.section-title {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #FFC107;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.1em;
+    font-family: 'Cairo', sans-serif;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    border-radius: 12px;
+    color: #ffffff;
+    transition: all 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #FFC107;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button {
+    background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%);
+    color: #1a1a1a;
+    border: none;
+    padding: 18px 60px;
+    font-size: 1.3em;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+    box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+    transition: all 0.3s;
+    width: 100%;
+    margin-top: 20px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 193, 7, 0.6);
+}
+
+.success-message {
+    background: rgba(46, 204, 113, 0.2);
+    border: 2px solid #2ecc71;
+    color: #2ecc71;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 30px;
+    display: none;
+}
+
+.success-message.show {
+    display: block;
+    animation: slideIn 0.5s;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* PDF Preview (hidden) */
+#pdfPreview {
+    position: fixed;
+    left: -9999px;
+    background: white;
+    width: 794px;
+    padding: 40px;
+    font-family: 'Cairo', sans-serif;
+    color: #000;
+    direction: rtl;
+}
+
+#pdfPreview .pdf-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 3px solid #FFC107;
+    padding-bottom: 20px;
+}
+
+#pdfPreview .pdf-logo {
+    width: 150px;
+    margin-bottom: 15px;
+}
+
+#pdfPreview h1 {
+    color: #FFC107;
+    font-size: 32px;
+    margin: 10px 0;
+}
+
+#pdfPreview .receipt-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+#pdfPreview .section {
+    margin: 30px 0;
+}
+
+#pdfPreview .section h2 {
+    color: #2C3E50;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-right: 4px solid #FFC107;
+    padding-right: 10px;
+}
+
+#pdfPreview .info-row {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f9fa;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#pdfPreview .info-label {
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+#pdfPreview .total-box {
+    background: #FFC107;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 30px 0;
+}
+
+#pdfPreview .total-box h3 {
+    font-size: 28px;
+    color: #1a1a1a;
+}
+
+#pdfPreview .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+    color: #666;
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.5em; }
+    .receipt-card { padding: 30px 20px; }
+    .logo-container img { width: 140px; }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img id="mainLogo" src="./4.png" alt="Bee Academy">
+            </div>
+            <h1>Bee Academy</h1>
+            <p class="tagline">نظام إصدار الإيصالات الإلكترونية</p>
+        </header>
+
+        <div class="receipt-card">
+            <h2 class="section-title">بيانات الطالب</h2>
+            
+            <div class="form-group">
+                <label>اسم الطالب</label>
+                <input type="text" id="studentName" placeholder="أدخل اسم الطالب">
+            </div>
+
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <input type="tel" id="studentPhone" placeholder="01xxxxxxxxx">
+            </div>
+
+            <h2 class="section-title" style="margin-top: 40px;">تفاصيل الدفع</h2>
+
+            <div class="form-group">
+                <label>المبلغ المدفوع (جنيه)</label>
+                <input type="number" id="amount" placeholder="0.00">
+            </div>
+
+            <div class="form-group">
+                <label>الكورس / البرنامج</label>
+                <input type="text" id="course" placeholder="اسم الكورس">
+            </div>
+
+            <div class="form-group">
+                <label>تاريخ الدفع</label>
+                <input type="date" id="paymentDate">
+            </div>
+
+            <div class="form-group">
+                <label>طريقة الدفع</label>
+                <input type="text" id="paymentMethod" placeholder="نقدي / فيزا / فودافون كاش">
+            </div>
+
+            <div class="form-group">
+                <label>ملاحظات إضافية (اختياري)</label>
+                <textarea id="notes" placeholder="أي معلومات إضافية..."></textarea>
+            </div>
+
+            <button onclick="generateReceipt()">📄 إصدار الإيصال</button>
+
+            <div id="successMessage" class="success-message">
+                ✅ تم إصدار الإيصال بنجاح!
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden PDF Preview -->
+    <div id="pdfPreview">
+        <div class="pdf-header">
+            <img class="pdf-logo" id="pdfLogo" src="./4.png" alt="Logo">
+            <h1>Bee Academy</h1>
+            <p style="color: #666; font-size: 14px;">إيصال دفع / Payment Receipt</p>
+        </div>
+
+        <div class="receipt-info">
+            <div><strong>رقم الإيصال:</strong> <span id="receiptNo"></span></div>
+            <div><strong>التاريخ:</strong> <span id="receiptDate"></span></div>
+        </div>
+
+        <div class="section">
+            <h2>بيانات الطالب</h2>
+            <div class="info-row">
+                <span class="info-label">الاسم:</span>
+                <span id="pdfName"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">الهاتف:</span>
+                <span id="pdfPhone"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">الكورس:</span>
+                <span id="pdfCourse"></span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>تفاصيل الدفع</h2>
+            <div class="info-row">
+                <span class="info-label">المبلغ:</span>
+                <span id="pdfAmount"></span> جنيه
+            </div>
+            <div class="info-row">
+                <span class="info-label">التاريخ:</span>
+                <span id="pdfPayDate"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">طريقة الدفع:</span>
+                <span id="pdfMethod"></span>
+            </div>
+            <div class="info-row" id="pdfNotesRow" style="display: none;">
+                <span class="info-label">ملاحظات:</span>
+                <span id="pdfNotes"></span>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <h3>الإجمالي: <span id="pdfTotal"></span> جنيه</h3>
+        </div>
+
+        <div class="footer">
+            <p><strong>شكراً لاختياركم Bee Academy</strong></p>
+            <p>We think, code, and build robots</p>
+            <p style="margin-top: 10px;">هذا إيصال إلكتروني صادر من النظام</p>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date
+        document.getElementById('paymentDate').valueAsDate = new Date();
+
+        async function generateReceipt() {
+            const name = document.getElementById('studentName').value;
+            const phone = document.getElementById('studentPhone').value;
+            const amount = document.getElementById('amount').value;
+            const course = document.getElementById('course').value;
+            const date = document.getElementById('paymentDate').value;
+            const method = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('notes').value;
+
+            if (!name || !phone || !amount || !course || !date || !method) {
+                alert('⚠️ من فضلك املأ جميع الحقول المطلوبة');
+                return;
+            }
+
+            // Fill PDF preview
+            const receiptNo = 'REC-' + Date.now().toString().slice(-8);
+            document.getElementById('receiptNo').textContent = receiptNo;
+            document.getElementById('receiptDate').textContent = new Date().toLocaleDateString('ar-EG');
+            document.getElementById('pdfName').textContent = name;
+            document.getElementById('pdfPhone').textContent = phone;
+            document.getElementById('pdfCourse').textContent = course;
+            document.getElementById('pdfAmount').textContent = amount;
+            document.getElementById('pdfPayDate').textContent = date;
+            document.getElementById('pdfMethod').textContent = method;
+            document.getElementById('pdfTotal').textContent = amount;
+            
+            if (notes) {
+                document.getElementById('pdfNotesRow').style.display = 'block';
+                document.getElementById('pdfNotes').textContent = notes;
+            }
+
+            // Generate PDF from HTML
+            const preview = document.getElementById('pdfPreview');
+            
+            try {
+                const canvas = await html2canvas(preview, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save('Receipt_' + name.replace(/\s+/g, '_') + '_' + Date.now() + '.pdf');
+
+                document.getElementById('successMessage').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 5000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ في إنشاء الإيصال');
+            }
+        }
+    </script>
+</body>
+</html>
